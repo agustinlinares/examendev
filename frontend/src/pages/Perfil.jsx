@@ -55,7 +55,7 @@ function EditarPerfil({ usuario, onGuardado }) {
   return (
     <form className="tarjeta perfil__editar" onSubmit={guardar} noValidate>
       <h2 className="perfil__titulo">Editar perfil</h2>
-      <Campo etiqueta="Nick" value={nick} maxLength={20} onChange={(e) => { setNick(e.target.value); setError(null); setEstado({ tipo: 'inicial' }); }} error={error} ayuda="Es lo que ven los demás en el ranking." />
+      <Campo etiqueta="Nick" value={nick} maxLength={20} onChange={(e) => { setNick(e.target.value); setError(null); setEstado({ tipo: 'inicial' }); }} error={error} ayuda="Es lo que ven los demás en el ranking. Debe cumplir las normas de uso (/normas)." />
 
       <div className="campo">
         <span className="campo__etiqueta" id="etiqueta-avatar">

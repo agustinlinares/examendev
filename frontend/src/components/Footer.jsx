@@ -37,6 +37,9 @@ export default function Footer() {
             <li>
               <Link to="/#preguntas-frecuentes">Preguntas frecuentes</Link>
             </li>
+            <li>
+              <Link to="/normas">Normas de uso</Link>
+            </li>
           </ul>
         </div>
 

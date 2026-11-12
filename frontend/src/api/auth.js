@@ -2,6 +2,7 @@
 import { USAR_MOCK } from './config.js';
 import { ApiError, http } from './http.js';
 import { esperar, guardarDb, hashear, leerDb, nuevoId, privado, usuarioDeToken } from './mock/db.js';
+import { comprobarNick } from '../utils/politicaNick.js';
 
 const NICK_VALIDO = /^[a-zA-Z0-9_.-]{3,20}$/;
 
@@ -13,6 +14,8 @@ const mock = {
     const db = leerDb();
     const emailNorm = email.trim().toLowerCase();
     if (!NICK_VALIDO.test(nick)) throw new ApiError('El nick no es válido.', { status: 400, campo: 'nick' });
+    const infraccion = comprobarNick(nick);
+    if (infraccion) throw new ApiError(infraccion.mensaje, { status: 400, campo: 'nick' });
     if (db.usuarios.some((u) => u.nick.toLowerCase() === nick.toLowerCase()))
       throw new ApiError('Ese nick ya está en uso.', { status: 409, campo: 'nick' });
     if (db.usuarios.some((u) => u.email === emailNorm))

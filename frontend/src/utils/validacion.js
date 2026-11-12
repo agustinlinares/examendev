@@ -1,11 +1,14 @@
 // Validaciones compartidas por los formularios de cuenta y perfil.
 import { NICK_VALIDO } from '../api/auth.js';
+import { comprobarNick } from './politicaNick.js';
 
 export const EMAIL_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function validarNick(nick) {
   if (!nick.trim()) return 'Escribe un nick.';
   if (!NICK_VALIDO.test(nick)) return 'Entre 3 y 20 caracteres: letras, números, guion bajo, punto o guion.';
+  const infraccion = comprobarNick(nick);
+  if (infraccion) return `${infraccion.mensaje} Consulta las normas de uso.`;
   return null;
 }
 
