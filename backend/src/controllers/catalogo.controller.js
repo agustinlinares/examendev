@@ -157,6 +157,7 @@ export async function getPreguntas(req, res) {
         p.tema_id,
         t.nombre AS tema_nombre,
         p.enunciado,
+        p.codigo,
         p.dificultad,
         (
           SELECT JSON_AGG(

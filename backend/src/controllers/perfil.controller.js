@@ -25,7 +25,7 @@ export async function getPerfil(req, res) {
     const usuarioId = req.usuario.id;
 
     const resUsuario = await query(
-      `SELECT id, nick, email, avatar_url, ciclo_actual_id,
+      `SELECT id, nick, email, rol, avatar_url, ciclo_actual_id,
               puntos_totales, racha_actual, mejor_racha, logros, created_at
        FROM usuarios
        WHERE id = $1`,
@@ -126,7 +126,7 @@ export async function actualizarPerfil(req, res) {
            avatar_url = CASE WHEN $2::text IS NOT NULL THEN $2 ELSE avatar_url END,
            ciclo_actual_id = COALESCE($3, ciclo_actual_id)
        WHERE id = $4
-       RETURNING id, nick, email, avatar_url, ciclo_actual_id, puntos_totales, racha_actual, mejor_racha, logros, created_at`,
+       RETURNING id, nick, email, rol, avatar_url, ciclo_actual_id, puntos_totales, racha_actual, mejor_racha, logros, created_at`,
       [nick ?? null, nuevoAvatar !== undefined ? nuevoAvatar : null, ciclo_actual_id ?? null, usuarioId]
     );
 
