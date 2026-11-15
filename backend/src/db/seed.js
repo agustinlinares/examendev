@@ -5,6 +5,7 @@ import pg from 'pg';
 import { pool } from './pool.js';
 import { CICLOS, MODULOS, PREGUNTAS } from '../../../frontend/src/data/index.js';
 import { cargarTemariosMarkdown } from './generate-sql.js';
+import { sincronizarCertificaciones } from './seedCertificaciones.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -41,7 +42,7 @@ const CERTIFICACIONES_INICIALES = [
     tiempo_minutos: 45,
     nota_aprobado: 700,
     descripcion: 'Conceptos de la nube, arquitectura y servicios de Azure, administración y gobernanza.',
-    activo: false,
+    activo: true,
   },
   {
     id: 'sc-900',
@@ -52,7 +53,7 @@ const CERTIFICACIONES_INICIALES = [
     tiempo_minutos: 45,
     nota_aprobado: 700,
     descripcion: 'Conceptos de seguridad, Microsoft Entra ID, soluciones de seguridad y cumplimiento.',
-    activo: false,
+    activo: true,
   },
   {
     id: 'dp-900',
@@ -63,7 +64,7 @@ const CERTIFICACIONES_INICIALES = [
     tiempo_minutos: 45,
     nota_aprobado: 700,
     descripcion: 'Datos relacionales y no relacionales, cargas de trabajo transaccionales y analíticas en Azure.',
-    activo: false,
+    activo: true,
   },
   {
     id: 'ms-900',
@@ -74,7 +75,7 @@ const CERTIFICACIONES_INICIALES = [
     tiempo_minutos: 45,
     nota_aprobado: 700,
     descripcion: 'Aplicaciones en la nube de Microsoft 365, seguridad, cumplimiento, precios y soporte.',
-    activo: false,
+    activo: true,
   },
   {
     id: 'ai-900',
@@ -85,7 +86,7 @@ const CERTIFICACIONES_INICIALES = [
     tiempo_minutos: 45,
     nota_aprobado: 700,
     descripcion: 'Cargas de trabajo de IA, Machine Learning, visión artificial y lenguaje natural en Azure.',
-    activo: false,
+    activo: true,
   },
 ];
 
@@ -267,6 +268,9 @@ export async function seed({ cerrarPool = true } = {}) {
       }
     }
     await client.query(`SELECT setval('opciones_id_seq', $1, true)`, [opcionIdCounter - 1]);
+
+    const resCerts = await sincronizarCertificaciones(client);
+    console.log(`✔ ${resCerts.totalTemas} temas y ${resCerts.totalPreguntas} preguntas de certificaciones sincronizadas.`);
 
     await client.query('COMMIT');
     console.log(`✔ ${totalPreguntas} preguntas y ${opcionIdCounter - 1} opciones sincronizadas sin borrar el progreso.`);
