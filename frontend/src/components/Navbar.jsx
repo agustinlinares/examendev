@@ -63,7 +63,7 @@ const Chevron = ({ girado }) => (
 );
 
 export default function Navbar() {
-  const { usuario, cerrarSesion } = useAuth();
+  const { usuario, cerrarSesion, puedeEditar } = useAuth();
   const navigate = useNavigate();
   const [abierto, setAbierto] = useState(false);
   const [scroll, setScroll] = useState(false);
@@ -151,6 +151,11 @@ export default function Navbar() {
                     <small>Ver mi perfil</small>
                   </span>
                 </Link>
+                {puedeEditar && (
+                  <Link to="/panel" className="btn btn--acento btn--bloque">
+                    Panel de gestión
+                  </Link>
+                )}
                 <button type="button" className="btn btn--oscuro btn--bloque" onClick={salir}>
                   Cerrar sesión
                 </button>
@@ -189,6 +194,11 @@ export default function Navbar() {
                 </button>
                 {cuenta.abierto && (
                   <div className="navbar__menu navbar__menu--derecha">
+                    {puedeEditar && (
+                      <Link to="/panel" className="navbar__menu-panel">
+                        Panel de gestión
+                      </Link>
+                    )}
                     <Link to="/perfil">Mi perfil</Link>
                     <Link to="/progreso">Mi progreso</Link>
                     <Link to="/ranking">Ranking</Link>
