@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout.jsx';
 import RutaPrivada from './components/RutaPrivada.jsx';
+import RutaRol from './components/RutaRol.jsx';
 import Inicio from './pages/Inicio.jsx';
 import Temario from './pages/Temario.jsx';
 import Certificaciones from './pages/Certificaciones.jsx';
@@ -15,6 +16,11 @@ import Restablecer from './pages/cuenta/Restablecer.jsx';
 import Contacto from './pages/Contacto.jsx';
 import Normas from './pages/Normas.jsx';
 import NoEncontrado from './pages/NoEncontrado.jsx';
+import Panel from './pages/panel/Panel.jsx';
+import Resumen from './pages/panel/Resumen.jsx';
+import PanelPreguntas from './pages/panel/Preguntas.jsx';
+import NuevaPregunta from './pages/panel/NuevaPregunta.jsx';
+import PanelUsuarios from './pages/panel/Usuarios.jsx';
 
 export default function App() {
   return (
@@ -41,6 +47,27 @@ export default function App() {
             </RutaPrivada>
           }
         />
+        {/* Panel de gestión: editor y admin; la sección Usuarios, solo admin */}
+        <Route
+          path="panel"
+          element={
+            <RutaRol roles={['editor', 'admin']}>
+              <Panel />
+            </RutaRol>
+          }
+        >
+          <Route index element={<Resumen />} />
+          <Route path="preguntas" element={<PanelPreguntas />} />
+          <Route path="preguntas/nueva" element={<NuevaPregunta />} />
+          <Route
+            path="usuarios"
+            element={
+              <RutaRol roles={['admin']}>
+                <PanelUsuarios />
+              </RutaRol>
+            }
+          />
+        </Route>
         <Route path="login" element={<Login />} />
         <Route path="registro" element={<Registro />} />
         <Route path="recuperar" element={<Recuperar />} />
