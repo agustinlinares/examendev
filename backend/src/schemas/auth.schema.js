@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { comprobarNick } from '../utils/politicaNick.js';
 
 // Schema para Registro de Usuario (tabla: usuarios)
 export const registerSchema = z.object({
@@ -7,7 +8,11 @@ export const registerSchema = z.object({
     .trim()
     .min(3, 'El nick debe tener al menos 3 caracteres')
     .max(30, 'El nick no puede superar los 30 caracteres')
-    .regex(/^[a-zA-Z0-9_.-]{3,30}$/, 'El nick no es válido.'),
+    .regex(/^[a-zA-Z0-9_.-]{3,30}$/, 'El nick no es válido.')
+    .superRefine((nick, ctx) => {
+      const infraccion = comprobarNick(nick);
+      if (infraccion) ctx.addIssue({ code: z.ZodIssueCode.custom, message: infraccion.mensaje });
+    }),
   email: z
     .string({ required_error: 'El email es obligatorio' })
     .trim()

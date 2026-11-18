@@ -2750,6 +2750,98 @@ button.opcion:hover:not(:disabled) {
   gap: 0 1rem;
 }
 
+/* ---------- Casilla de aceptación ---------- */
+
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  cursor: pointer;
+  line-height: 1.45;
+}
+
+.campo .check input[type='checkbox'] {
+  width: 1.15rem;
+  height: 1.15rem;
+  min-height: 0;
+  margin: 0.15rem 0 0;
+  padding: 0;
+  flex-shrink: 0;
+  accent-color: var(--marca-texto);
+}
+
+/* ---------- Normas de uso ---------- */
+
+.normas {
+  max-width: 860px;
+}
+
+.normas__lista {
+  display: grid;
+  gap: 1rem;
+  margin: 2.5rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.normas__item {
+  display: flex;
+  gap: 1.1rem;
+  padding: clamp(1.1rem, 3vw, 1.5rem);
+}
+
+.normas__item h2,
+.normas__aviso h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1.1rem;
+}
+
+.normas__item p {
+  margin: 0 0 0.6rem;
+  color: var(--texto-2);
+}
+
+.normas__numero {
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--bg-2);
+  color: var(--marca-texto);
+  font-weight: 700;
+}
+
+.normas__ejemplos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+}
+
+.normas__ejemplos code {
+  padding: 0.1rem 0.45rem;
+  border-radius: var(--radio-sm);
+  background: var(--bg-2);
+  text-decoration: line-through;
+}
+
+.normas__aviso {
+  padding: clamp(1.1rem, 3vw, 1.5rem);
+}
+
+.normas__aviso ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+  color: var(--texto-2);
+}
+
+.normas__aviso li + li {
+  margin-top: 0.4rem;
+}
+
 @media (min-width: 560px) {
   .campo-doble {
     grid-template-columns: 1fr 1fr;

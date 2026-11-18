@@ -9,7 +9,7 @@ import { USAR_MOCK } from '../../api/config.js';
 import AvisoDemo from './AvisoDemo.jsx';
 import { destinoSeguro } from './Login.jsx';
 
-const INICIAL = { nick: '', email: '', password: '', confirmar: '' };
+const INICIAL = { nick: '', email: '', password: '', confirmar: '', normas: false };
 
 function validar(d) {
   return {
@@ -17,6 +17,7 @@ function validar(d) {
     email: validarEmail(d.email),
     password: validarPassword(d.password),
     confirmar: d.confirmar !== d.password ? 'Las contraseñas no coinciden.' : null,
+    normas: d.normas ? null : 'Debes aceptar las normas de uso para crear la cuenta.',
   };
 }
 
@@ -39,11 +40,12 @@ export default function Registro() {
   if (usuario && !enviando) return <Navigate to={destino} replace />;
 
   const cambiar = (e) => {
-    const { name, value } = e.target;
+    const { name, type, checked } = e.target;
+    const value = type === 'checkbox' ? checked : e.target.value;
     const nuevos = { ...datos, [name]: value };
     setDatos(nuevos);
-    // Revalida en vivo los campos que el usuario ya ha tocado.
-    if (tocados[name]) setErrores((er) => ({ ...er, [name]: validar(nuevos)[name] }));
+    // Revalida en vivo los campos que el usuario ya ha tocado (la casilla, siempre).
+    if (tocados[name] || type === 'checkbox') setErrores((er) => ({ ...er, [name]: validar(nuevos)[name] }));
   };
 
   const salir = (e) => {
@@ -56,7 +58,7 @@ export default function Registro() {
     e.preventDefault();
     const nuevos = validar(datos);
     setErrores(nuevos);
-    setTocados({ nick: true, email: true, password: true, confirmar: true });
+    setTocados({ nick: true, email: true, password: true, confirmar: true, normas: true });
     setErrorGeneral(null);
     if (Object.values(nuevos).some(Boolean)) {
       document.querySelector('[aria-invalid="true"]')?.focus();
@@ -104,6 +106,23 @@ export default function Registro() {
             )}
           </Campo>
           <Campo etiqueta="Repite la contraseña" name="confirmar" type="password" autoComplete="new-password" value={datos.confirmar} onChange={cambiar} onBlur={salir} error={errores.confirmar} />
+          <div className="campo campo--check">
+            <label className="check">
+              <input type="checkbox" name="normas" checked={datos.normas} onChange={cambiar} aria-invalid={Boolean(errores.normas)} aria-describedby={errores.normas ? 'normas-error' : undefined} />
+              <span>
+                He leído y acepto las{' '}
+                <Link to="/normas" className="enlace" target="_blank" rel="noopener">
+                  normas de uso
+                </Link>{' '}
+                (nada de nicks políticos, vulgares, racistas u ofensivos).
+              </span>
+            </label>
+            {errores.normas && (
+              <span id="normas-error" className="campo__error">
+                {errores.normas}
+              </span>
+            )}
+          </div>
           <button type="submit" className="btn btn--primario btn--lg btn--bloque" disabled={enviando} aria-busy={enviando}>
             {enviando ? (
               <>

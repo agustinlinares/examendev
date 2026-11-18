@@ -13,6 +13,7 @@ import Registro from './pages/cuenta/Registro.jsx';
 import Recuperar from './pages/cuenta/Recuperar.jsx';
 import Restablecer from './pages/cuenta/Restablecer.jsx';
 import Contacto from './pages/Contacto.jsx';
+import Normas from './pages/Normas.jsx';
 import NoEncontrado from './pages/NoEncontrado.jsx';
 
 export default function App() {
@@ -45,6 +46,7 @@ export default function App() {
         <Route path="recuperar" element={<Recuperar />} />
         <Route path="restablecer" element={<Restablecer />} />
         <Route path="contacto" element={<Contacto />} />
+        <Route path="normas" element={<Normas />} />
         <Route path="*" element={<NoEncontrado />} />
       </Route>
     </Routes>
