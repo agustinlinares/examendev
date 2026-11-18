@@ -99,6 +99,12 @@ CREATE TABLE IF NOT EXISTS usuarios (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Rol del usuario: 'usuario' (por defecto), 'editor' (gestiona preguntas/temas) o 'admin'.
+-- La cuenta admin se crea/actualiza al arrancar con ADMIN_* del .env (ver db/admin.js).
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS rol VARCHAR(20) NOT NULL DEFAULT 'usuario';
+ALTER TABLE usuarios DROP CONSTRAINT IF EXISTS usuarios_rol_check;
+ALTER TABLE usuarios ADD CONSTRAINT usuarios_rol_check CHECK (rol IN ('usuario', 'editor', 'admin'));
+
 -- 9. TABLA DE PARTIDAS
 CREATE TABLE IF NOT EXISTS partidas (
     id SERIAL PRIMARY KEY,

@@ -13,6 +13,7 @@ export function formatearUsuario(u) {
     id: String(u.id),
     nick: u.nick,
     email: u.email,
+    rol: u.rol || 'usuario',
     avatar: u.avatar_url || 'zorro',
     avatar_url: u.avatar_url || 'zorro',
     ciclo_actual_id: u.ciclo_actual_id ?? null,
@@ -61,13 +62,13 @@ export async function register(req, res) {
     const resultado = await query(
       `INSERT INTO usuarios (nick, email, password_hash, avatar_url, ciclo_actual_id)
        VALUES ($1, $2, $3, $4, $5)
-       RETURNING id, nick, email, avatar_url, ciclo_actual_id, puntos_totales, racha_actual, mejor_racha, logros, created_at`,
+       RETURNING id, nick, email, rol, avatar_url, ciclo_actual_id, puntos_totales, racha_actual, mejor_racha, logros, created_at`,
       [nick, emailNorm, password_hash, avatarFinal, ciclo_actual_id ?? null]
     );
 
     const usuario = formatearUsuario(resultado.rows[0]);
     const token = jwt.sign(
-      { id: Number(resultado.rows[0].id), nick: usuario.nick, email: usuario.email },
+      { id: Number(resultado.rows[0].id), nick: usuario.nick, email: usuario.email, rol: usuario.rol },
       JWT_SECRET,
       { expiresIn: '7d' }
     );
@@ -91,7 +92,7 @@ export async function login(req, res) {
     const { email, password } = req.body;
 
     const resultado = await query(
-      `SELECT id, nick, email, password_hash, avatar_url, ciclo_actual_id,
+      `SELECT id, nick, email, rol, password_hash, avatar_url, ciclo_actual_id,
               puntos_totales, racha_actual, mejor_racha, logros, created_at
        FROM usuarios
        WHERE LOWER(email) = LOWER($1)`,
@@ -116,7 +117,7 @@ export async function login(req, res) {
 
     const usuario = formatearUsuario(fila);
     const token = jwt.sign(
-      { id: Number(fila.id), nick: usuario.nick, email: usuario.email },
+      { id: Number(fila.id), nick: usuario.nick, email: usuario.email, rol: usuario.rol },
       JWT_SECRET,
       { expiresIn: '7d' }
     );
@@ -138,7 +139,7 @@ export async function login(req, res) {
 export async function yo(req, res) {
   try {
     const resultado = await query(
-      `SELECT id, nick, email, avatar_url, ciclo_actual_id,
+      `SELECT id, nick, email, rol, avatar_url, ciclo_actual_id,
               puntos_totales, racha_actual, mejor_racha, logros, created_at
        FROM usuarios
        WHERE id = $1`,
